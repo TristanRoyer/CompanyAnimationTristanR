@@ -25,13 +25,21 @@ local scene = composer.newScene( sceneName )
 -----------------------------------------------------------------------------------------
  
 -- The local variables for this scene
-local CompanyLogo = display.newImageRect
-local DramaticSounds = audio.loadSound("Sounds/bensound-ukulele.mp3")
+local CompanyLogo 
+local DramaticSounds
 local DramaticSoundsChannel
-CompanyLogo.alpha = 0
-local CompanyLogoText = display.newText("4 Cake Company",0,0,Arial,70)
+local CompanyLogoText
+ CompanyLogo = display.newImageRect("Photos/CompanyLogoTristan.png",400,400)
+ CompanyLogo.x = display.contentWidth/2
+ CompanyLogo.y = display.contentHeight/2
+ CompanyLogo.alpha = 0
+    -- set the initial x and y position of the beetleship
+  
+
+CompanyLogoText = display.newText("4 Cake Company",525,700,Arial,70)
 CompanyLogoText:setTextColor(1 , 0, 1)
 CompanyLogoText.alpha = 0
+
 
 --------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -39,18 +47,16 @@ CompanyLogoText.alpha = 0
 
 --
 local function FadeIn()
-    CompanyLogo.alpha = CompanyLogo.alpha + 0.5
-    CompanyLogoText.alpha = CompanyLogoText.alpha + 0.5
+    transition.to(CompanyLogoText, {time = 1000, alpha = 1})
+    transition.to(CompanyLogo, {time = 1000, alpha = 1})
 end
  function FadeInEvent( event )
     timer.performWithDelay(200,FadeIn)
-end	
+    
+end
 
 local function FadeOut()
-    CompanyLogo.alpha = CompanyLogo.alpha - 0.5
-end
-local function FadeOutEvent(event)
-timer.performWithDelay(1300,FadeOut)
+ transition.to(CompanyLogo, {time = 1000, alpha = 0})
 end
 
 -- The function that will go to the main menu 
@@ -69,18 +75,15 @@ function scene:create( event )
     local sceneGroup = self.view
 
     -- set the background to be black
-    display.setDefault("background", 0, 0, 0)
+    display.setDefault("background", 0.25, 1, 0.76)
 
     -- Insert the beetleship image
-    CompanyLogo = display.newImageRect("Images/rocket.png", 200, 200)
+   
 
-    -- set the initial x and y position of the beetleship
-    CompanyLogo.x = 100
-    CompanyLogo.y = display.contentHeight/2
 
     -- Insert objects into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( CompanyLogo )
-
+    sceneGroup:insert( CompanyLogoText )
 end -- function scene:create( event )
 
 --------------------------------------------------------------------------------------------
@@ -105,16 +108,14 @@ function scene:show( event )
     elseif ( phase == "did" ) then
         -- start the splash screen music
         DramaticSoundsChannel = audio.play( DramaticSounds )
-        Runtime.addEventListener("enterFrame",FadeInEvent)
-        if (CompanyLogo.alpha = 1 ) then
-            Runtime.addEventListener("enterFrame",FadeOutEvent)
+        FadeIn()
+        timer.performWithDelay(3000,FadeOut)
         end
 
          
         -- Go to the main menu screen after the given time.
-        timer.performWithDelay ( 3000, gotoMainMenu)          
+        timer.performWithDelay ( 4000, gotoMainMenu)          
         
-    end
 
 end --function scene:show( event )
 
