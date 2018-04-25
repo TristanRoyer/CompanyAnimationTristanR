@@ -3,10 +3,10 @@
 -----------------------------------------------------------------------------------------
 --
 -- splash_screen.lua
--- Created by: Your Name
--- Date: Month Day, Year
+-- Created by: Tristan Royer
+-- Date: 4/25/18
 -- Description: This is the splash screen of the game. It displays the 
--- company logo that...
+-- company logo that fades in and fades out along with the company name
 -----------------------------------------------------------------------------------------
 
 -- Use Composer Library
@@ -26,16 +26,13 @@ local scene = composer.newScene( sceneName )
  
 -- The local variables for this scene
 local CompanyLogo 
-local DramaticSounds
+local DramaticSounds = audio.loadSound("Sounds/DUN DUN DUUUUN!!! (Dramatic Sound Effect).mp3")
 local DramaticSoundsChannel
 local CompanyLogoText
  CompanyLogo = display.newImageRect("Photos/CompanyLogoTristan.png",400,400)
  CompanyLogo.x = display.contentWidth/2
  CompanyLogo.y = display.contentHeight/2
  CompanyLogo.alpha = 0
-    -- set the initial x and y position of the beetleship
-  
-
 CompanyLogoText = display.newText("4 Cake Company",525,700,Arial,70)
 CompanyLogoText:setTextColor(1 , 0, 1)
 CompanyLogoText.alpha = 0
@@ -45,16 +42,15 @@ CompanyLogoText.alpha = 0
 -- LOCAL FUNCTIONS
 --------------------------------------------------------------------------------------------
 
---
+-- Fades in the company Logo and Name
 local function FadeIn()
     transition.to(CompanyLogoText, {time = 1000, alpha = 1})
     transition.to(CompanyLogo, {time = 1000, alpha = 1})
 end
- function FadeInEvent( event )
-    timer.performWithDelay(200,FadeIn)
     
-end
 
+
+-- Fades out the company logo
 local function FadeOut()
  transition.to(CompanyLogo, {time = 1000, alpha = 0})
 end
@@ -74,11 +70,10 @@ function scene:create( event )
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
 
-    -- set the background to be black
+    -- set the background to be greenish blue
     display.setDefault("background", 0.25, 1, 0.76)
 
-    -- Insert the beetleship image
-   
+    
 
 
     -- Insert objects into the scene group in order to ONLY be associated with this scene
@@ -108,9 +103,12 @@ function scene:show( event )
     elseif ( phase == "did" ) then
         -- start the splash screen music
         DramaticSoundsChannel = audio.play( DramaticSounds )
+        -- calls the function to fade in
         FadeIn()
+        -- calls the function to fade out after 3 seconds
         timer.performWithDelay(3000,FadeOut)
-        end
+    end
+        
 
          
         -- Go to the main menu screen after the given time.
@@ -140,7 +138,7 @@ function scene:hide( event )
     -- Called immediately after scene goes off screen.
     elseif ( phase == "did" ) then
         
-        -- stop the jungle sounds channel for this screen
+        -- stop the Dramatic sounds channel for this screen
         audio.stop(DramaticSoundsChannel)
     end
 
